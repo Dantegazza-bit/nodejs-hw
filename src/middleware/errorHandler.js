@@ -1,11 +1,24 @@
+import { isCelebrateError } from 'celebrate';
 import { isHttpError } from 'http-errors';
 
 export const errorHandler = (err, req, res, _next) => {
-  const status = isHttpError(err) ? err.status : 500;
+  // ✅ Celebrate validation errors
+  if (isCelebrateError(err)) {
+    const firstError = err.details.values().next().value;
+    const message = firstError?.details?.[0]?.message || 'Validation error';
 
-  const message = err.message ?? (isHttpError(err) ? err.name : 'Internal Server Error');
+    return res.status(400).json({ message });
+  }
 
-  res.status(status).json({
-    message,
+  // ✅ http-errors
+  if (isHttpError(err)) {
+    return res.status(err.status).json({
+      message: err.message || err.name,
+    });
+  }
+
+  // ✅ other errors
+  return res.status(500).json({
+    message: err.message || 'Internal Server Error',
   });
 };
