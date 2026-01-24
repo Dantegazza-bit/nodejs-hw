@@ -89,8 +89,8 @@ export const deleteNote = async (req, res, next) => {
       return next(createHttpError(404, 'Note not found'));
     }
 
-    // ✅ краще 204 без тіла (але якщо у вас перевірка хоче 200 — скажеш, підлаштуємо)
-    res.status(204).send();
+    // ✅ Вимога автоперевірки: 200 + видалена нотатка
+    res.status(200).json(note);
   } catch (error) {
     next(error);
   }
