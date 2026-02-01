@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { celebrate, Segments } from 'celebrate';
+import { celebrate } from 'celebrate';
 
 import {
   registerUser,
@@ -12,9 +12,10 @@ import { registerUserSchema, loginUserSchema } from '../validations/authValidati
 
 const router = Router();
 
-router.post('/register', celebrate({ [Segments.BODY]: registerUserSchema }), registerUser);
-router.post('/login', celebrate({ [Segments.BODY]: loginUserSchema }), loginUser);
-router.post('/refresh', refreshUserSession);
-router.post('/logout', logoutUser);
+router.post('/auth/register', celebrate({ body: registerUserSchema }), registerUser);
+router.post('/auth/login', celebrate({ body: loginUserSchema }), loginUser);
+
+router.post('/auth/refresh', refreshUserSession);
+router.post('/auth/logout', logoutUser);
 
 export default router;

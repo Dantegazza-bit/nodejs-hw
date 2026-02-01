@@ -34,16 +34,12 @@ const startServer = async () => {
   app.use(express.json());
   app.use(cookieParser());
 
-  app.use('/auth', authRoutes);
+  // ✅ ОБИДВА без префікса
+  app.use(authRoutes);
   app.use(notesRoutes);
 
-  // ✅ celebrate errors middleware (має бути ДО наших error/notFound)
   app.use(errors());
-
-  // ✅ 404 після всіх роутів
   app.use(notFoundHandler);
-
-  // ✅ загальний error handler в самому кінці
   app.use(errorHandler);
 
   app.listen(PORT, () => {
