@@ -14,7 +14,7 @@ export const sendEmail = async ({ to, subject, html }) => {
     tls: { rejectUnauthorized: false },
   });
 
-  await transporter.sendMail({
+  return await transporter.sendMail({
     from: SMTP_FROM,
     to,
     subject,

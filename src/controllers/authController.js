@@ -141,12 +141,12 @@ export const requestResetEmail = async (req, res, next) => {
 
     try {
       await sendEmail({
+        from: process.env.SMTP_FROM,
         to: user.email,
         subject: 'Password reset',
         html,
       });
-    } catch (e) {
-      console.error('SMTP ERROR:', e); // тимчасово!
+    } catch {
       throw createHttpError(500, 'Failed to send the email, please try again later.');
     }
 

@@ -36,8 +36,11 @@ userSchema.methods.toJSON = function toJSON() {
 };
 
 // ✅ username завжди = email (за вимогою)
-userSchema.pre('save', function () {
-  this.username = this.email;
+userSchema.pre('save', function (next) {
+  if (!this.username) {
+    this.username = this.email;
+  }
+  next();
 });
 
 export const User = model('User', userSchema);
