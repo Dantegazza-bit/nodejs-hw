@@ -17,6 +17,10 @@ const userSchema = new Schema(
       required: true,
       minlength: 8,
     },
+    avatar: {
+      type: String,
+      default: 'https://ac.goit.global/fullstack/react/default-avatar.jpg',
+    },
   },
   {
     timestamps: true,
@@ -31,11 +35,9 @@ userSchema.methods.toJSON = function toJSON() {
   return obj;
 };
 
-// якщо username не заданий — ставимо як email при створенні
+// ✅ username завжди = email (за вимогою)
 userSchema.pre('save', function () {
-  if (this.isNew && !this.username) {
-    this.username = this.email;
-  }
+  this.username = this.email;
 });
 
 export const User = model('User', userSchema);

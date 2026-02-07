@@ -1,0 +1,23 @@
+import nodemailer from 'nodemailer';
+
+export const sendEmail = async ({ to, subject, html }) => {
+  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, SMTP_FROM } = process.env;
+
+  const transporter = nodemailer.createTransport({
+    host: SMTP_HOST,
+    port: Number(SMTP_PORT),
+    secure: false, // 587 => STARTTLS
+    auth: {
+      user: SMTP_USER,
+      pass: SMTP_PASSWORD,
+    },
+    tls: { rejectUnauthorized: false },
+  });
+
+  await transporter.sendMail({
+    from: SMTP_FROM,
+    to,
+    subject,
+    html,
+  });
+};
