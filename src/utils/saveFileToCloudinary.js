@@ -1,5 +1,5 @@
 import { v2 as cloudinary } from 'cloudinary';
-import { Readable } from 'node:stream';
+import { Readable } from 'stream';
 
 const ensureCloudinary = () => {
   cloudinary.config({
@@ -14,9 +14,17 @@ export const saveFileToCloudinary = (buffer) => {
 
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
-      { folder: 'avatars', resource_type: 'image' },
+      {
+        folder: 'avatars',
+        resource_type: 'image',
+        overwrite: true,
+        use_filename: true,
+      },
       (error, result) => {
-        if (error) return reject(error);
+        if (error) {
+          return reject(error);
+        }
+
         resolve(result);
       }
     );
